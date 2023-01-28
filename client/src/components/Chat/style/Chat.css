@@ -1,0 +1,11 @@
+.msgArea{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.chatScrollBar::-webkit-scrollbar {
+}
+.chatScrollBar{
+    overflow-y: scroll;
+}
