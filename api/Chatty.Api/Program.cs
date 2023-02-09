@@ -2,6 +2,11 @@ using Chatty.Api.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add logging to console
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
+
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -16,7 +21,8 @@ builder.Services.AddCors(options =>
         policy.AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials()
-              .WithOrigins("http://localhost:3000");
+              .WithOrigins("http://192.168.31.41:3000", 
+                            "http://localhost:3000");
     });
 });
 

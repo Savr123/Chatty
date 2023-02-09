@@ -11,10 +11,12 @@ namespace Chatty.Api.Controllers
     public class ChatController : Controller
     {
         private readonly IHubContext<ChatHub, IChatClient> _chatHub;
+        private readonly ILogger _logger;
 
-        public ChatController(IHubContext<ChatHub, IChatClient> chatHub)
+        public ChatController(IHubContext<ChatHub, IChatClient> chatHub,ILogger<ChatController> logger)
         {
             _chatHub = chatHub;
+            _logger = logger;
         }
 
         [HttpPost("messages")]
@@ -22,6 +24,8 @@ namespace Chatty.Api.Controllers
         {
             message.date = Convert.ToDateTime(message.date);
             await _chatHub.Clients.All.RecieveMessage(message);
+            _logger.LogInformation("connection established", DateTime.UtcNow.ToLongTimeString());
+
         }
     }
 }
