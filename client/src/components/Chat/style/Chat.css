@@ -9,3 +9,10 @@
 .chatScrollBar{
     overflow-y: scroll;
 }
+
+.paper{
+    width: "80vw";
+    height: "89vh";
+    margin: "15px auto";
+    overflow: "hidden";
+}

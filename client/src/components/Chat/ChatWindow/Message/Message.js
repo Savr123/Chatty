@@ -5,14 +5,14 @@ import { Grid } from '@mui/material';
 import { ListItemText } from '@mui/material';
 
 const Message = (props) => (
-    <ListItem key={props.key}>
+    <ListItem>
         <Grid container>
             <Grid item xs={12}>
-                <ListItemText align="right" primary={props.message}></ListItemText>
+                <ListItemText align="right" primary={props.text}></ListItemText>
             </Grid>
             <Grid item xs={12}>
                 <ListItemText align="right" secondary={props.date}></ListItemText>
-                <ListItemText align="right" secondary={props.user}></ListItemText>
+                <ListItemText align="right" secondary={props.id}></ListItemText>
             </Grid>
         </Grid>
     </ListItem>

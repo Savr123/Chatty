@@ -24,7 +24,7 @@ const useStyles = makeStyles({
   },
   chatSection: {
     width: '100%',
-    height: '80vh'
+    height: '100%'
   },
   headBG: {
       backgroundColor: '#e0e0e0'
@@ -35,14 +35,20 @@ const useStyles = makeStyles({
   messageArea: {
     height: '70vh',
     overflowY: 'auto'
+  },
+  paper: {
+    width: "80vw",
+    height: "89vh",
+    margin: "15px auto",
+    overflow: "hidden"
   }
 });
 
 const Chat = () => {
-  const classes = useStyles();
+    const classes = useStyles();
 
-  const [ connection, setConnection ] = useState([]);
-    const [ chat, setChat ] = useState([{user: 'Savr', message:'Hello', date: (new Date()).toJSON()}]);
+    const [ connection, setConnection ] = useState([]);
+    const [ chat, setChat ] = useState([{id: '1', text:'Hello', date: (new Date()).toJSON()}]);
     const latestChat = useRef(null);
 
     latestChat.current = chat;
@@ -69,13 +75,15 @@ const Chat = () => {
 
     const sendMessage = async (message, date) => {
         const chatMessage = {
-            User:       "Savr", 
-            message:    message,
-            date:       date
+            id: "1",
+            text:    message,
+            date:       date,
+            chatId: "1",
+            userId: "1"
         };
 
         try{
-            await fetch('https://localhost:8080/chat/messages', {
+            await fetch('https://localhost:8080/Chat/messages', {
                 method: 'POST',
                 body: JSON.stringify(chatMessage),
                 headers: {
@@ -89,8 +97,9 @@ const Chat = () => {
     }
 
   return (
-      <div>
-        <Grid container component={Paper} className={classes.chatSection}>
+    
+    <Paper className={classes.paper}>
+        <Grid container className={classes.chatSection}>
             <Grid item xs={3} className={classes.borderRight500}>
                 <List>
                     <ListItem button key="RemySharp">
@@ -127,12 +136,13 @@ const Chat = () => {
                     </ListItem>
                 </List>
             </Grid>
-            <Grid item xs={9} sx={{display:'flex', justifyContent:'flex-end', flexDirection: 'column', maxHeight:'100%'}}>
+            <Grid item xs={9} sx={{display:'flex', justifyContent:'flex-end', flexDirection: 'column', height: '100%'}}>
                 <ChatWindow chat={chat} sx={{overflowY: 'scroll'}}/>
                 <ChatInput sendMessage={sendMessage}/>
             </Grid>
         </Grid>
-      </div>
+    </Paper>
+    
   );
 }
 

@@ -41,7 +41,7 @@ const ChatInput = (props) => {
                     onChange = {onMessageUpdate}
                 />
             </Grid>
-            <Grid xs={1} align="right">
+            <Grid item xs={1} align="right">
                 <Fab color="primary" aria-label="add" onClick={onSubmit}><SendIcon /></Fab>
             </Grid>
         </Grid>

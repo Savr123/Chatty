@@ -18,11 +18,13 @@ const ChatWindow = (props) => {
         .map((m, id) => <Message
             date        = {(new Date(m.date)).toLocaleString()}
             key         = {id}
-            user        = {m.user}
-            message     = {m.message}/>);
+            id          = {m.id}
+            text        = {m.text}
+            chatId      = {m.chatId}
+            userId      ={m.userId}/>);
     
     return (
-        <Scrollbars ref={scrollBarRef} autoHide='true'>
+        <Scrollbars ref={scrollBarRef} autoHide>
             <List sx={{ maxHeight:'100%', height:'max-content' }}>
                 {chat}
             </List>
