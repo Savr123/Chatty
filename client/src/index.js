@@ -4,10 +4,20 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import { Route, Routes, BrowserRouter  as Router } from 'react-router-dom';
+
+import Chat from './components/Chat/Chat';
+import Login from './components/LoginPage';
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <Router>
+        <Routes>
+            <Route path="/signIn" element={<Login/>}></Route>
+            <Route path="/" element={<App/>}></Route>
+      </Routes>
+    </Router>
   </React.StrictMode>
 );
 
