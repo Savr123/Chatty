@@ -1,6 +1,10 @@
+using System.Net;
 using Chatty.Api.Hubs;
+using Chatty.Api.Models;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Server=(localdb)\\mssqllocaldb;Database=ChattyDb;Trusted_Connection=True";
 
 // Add logging to console
 builder.Logging.ClearProviders();
@@ -12,6 +16,8 @@ builder.Logging.AddConsole();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddDbContext<ChatDbContext>(
+    options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 builder.Services.AddCors(options =>
@@ -21,9 +27,20 @@ builder.Services.AddCors(options =>
         policy.AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials()
-              .WithOrigins("http://192.168.31.41:3000", 
-                            "http://localhost:3000");
+            //   .AllowAnyOrigin();
+              .WithOrigins("http://localhost:3000"); 
     });
+});
+
+// if (!builder.Environment.IsDevelopment())
+// {
+
+// }
+
+builder.Services.AddHttpsRedirection(options =>
+{
+    options.RedirectStatusCode = (int)HttpStatusCode.PermanentRedirect;
+    options.HttpsPort = 443;
 });
 
 var app = builder.Build();
@@ -35,13 +52,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 
 app.MapControllers();
 
 app.UseRouting();
+
+app.UseAuthorization();
 
 app.UseCors("ClientPermission");
 
