@@ -7,7 +7,6 @@ import './style/Chat.css';
 import { Grid } from '@mui/material';
 
 
-import { makeStyles } from '@mui/styles';
 import { Paper } from '@mui/material';
 import { Divider } from '@mui/material';
 import { TextField } from '@mui/material';
@@ -18,34 +17,8 @@ import { ListItemText } from '@mui/material';
 import { Avatar } from '@mui/material';
 
 
-const useStyles = makeStyles({
-  table: {
-    minWidth: 650,
-  },
-  chatSection: {
-    width: '100%',
-    height: '100%'
-  },
-  headBG: {
-      backgroundColor: '#e0e0e0'
-  },
-  borderRight500: {
-      borderRight: '1px solid #e0e0e0'
-  },
-  messageArea: {
-    height: '70vh',
-    overflowY: 'auto'
-  },
-  paper: {
-    width: "80vw",
-    height: "89vh",
-    margin: "15px auto",
-    overflow: "hidden"
-  }
-});
 
 const Chat = () => {
-    const classes = useStyles();
 
     const [ connection, setConnection ] = useState([]);
     const [ chat, setChat ] = useState([{id: '1', text:'Hello', date: (new Date()).toJSON()}]);
@@ -98,9 +71,9 @@ const Chat = () => {
 
   return (
     
-    <Paper className={classes.paper}>
-        <Grid container className={classes.chatSection}>
-            <Grid item xs={3} className={classes.borderRight500}>
+    <Paper className="custom-paper">
+        <Grid container className="chatSection">
+            <Grid item xs={3} className="borderRight500">
                 <List>
                     <ListItem button key="RemySharp">
                         <ListItemIcon>

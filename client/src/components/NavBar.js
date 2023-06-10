@@ -15,7 +15,7 @@ import Box from '@mui/material/Box';
 
 const NavBar = () => {
     const [isOpen, setOpen] = useState(false);
-    const navItems = [['signIn', '/signIn'], ['signUp', '/']];
+    const navItems = [['signIn', '/signIn'], ['signUp', '/signUp']];
 
     return (
     <AppBar component="nav" position='static'>

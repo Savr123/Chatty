@@ -33,17 +33,20 @@ export default function Login() {
   const [ email, setEmail ] = useState();
   const [ password, setPassword] = useState();
 
+  //TODO Replace api adress with env variable
   const handleSubmit = async (event) => {
     event.preventDefault();
     const userCredentials = {
       email: email,
-      password: password
+      password: password,
+      name: "1"
     }
     const data = new FormData(event.currentTarget);
-
+    data.set("name","1");
     try{
       await fetch('https://localhost:8080/login',{
         method:'POST',
+        body:JSON.stringify(Object.fromEntries(data)),
         headers: {
           'Content-Type': 'application/json'
         }

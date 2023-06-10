@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import Message from './Message/Message';
 
 import { List } from '@mui/material';
-import { Scrollbars } from 'react-custom-scrollbars';
+import { Scrollbars } from 'react-custom-scrollbars-2';
 
 const ChatWindow = (props) => {
     
