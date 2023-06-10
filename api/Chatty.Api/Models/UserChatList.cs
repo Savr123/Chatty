@@ -1,8 +1,10 @@
 
-namespace Chatty.Api.Models;
+// namespace Chatty.Api.Models;
 
-public class UserChatList 
-{
-    public int chatId { get; set; }
-    public int userId { get; set; }
-}
+// public class UserChat
+// {
+//     public int userId {get;set;}
+//     public int chatId {get;set;}
+//     public Chat Chats { get; set; } = null!;
+//     public User Users { get; set; } = null!;
+// }

@@ -19,55 +19,78 @@ namespace Chatty.Api.Migrations
                 .HasAnnotation("ProductVersion", "7.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
+            modelBuilder.Entity("ChatUser", b =>
+                {
+                    b.Property<int>("ChatsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ChatsId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("ChatUser");
+                });
+
             modelBuilder.Entity("Chatty.Api.Models.Chat", b =>
                 {
                     b.Property<int>("Id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("userId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.HasKey("Id", "userId");
+                    b.HasKey("Id");
 
                     b.ToTable("Chats");
                 });
 
             modelBuilder.Entity("Chatty.Api.Models.Message", b =>
                 {
-                    b.Property<int>("chatId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("userId")
+                    b.Property<int?>("ChatsId")
                         .HasColumnType("int");
 
                     b.Property<string>("Text")
-                        .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<int?>("UsersId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("date")
                         .HasColumnType("datetime(6)");
 
-                    b.HasKey("chatId", "Id", "userId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("ChatsId");
+
+                    b.HasIndex("UsersId");
 
                     b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("Chatty.Api.Models.User", b =>
                 {
-                    b.Property<int>("chatId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<string>("Name")
+                    b.Property<string>("email")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("firstName")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<string>("lastName")
                         .IsRequired()
                         .HasColumnType("longtext");
 
@@ -78,22 +101,39 @@ namespace Chatty.Api.Migrations
                     b.Property<DateTime>("registrationDate")
                         .HasColumnType("datetime(6)");
 
-                    b.HasKey("chatId", "Id");
+                    b.HasKey("Id");
 
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Chatty.Api.Models.UserChatList", b =>
+            modelBuilder.Entity("ChatUser", b =>
                 {
-                    b.Property<int>("chatId")
-                        .HasColumnType("int");
+                    b.HasOne("Chatty.Api.Models.Chat", null)
+                        .WithMany()
+                        .HasForeignKey("ChatsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Property<int>("userId")
-                        .HasColumnType("int");
+                    b.HasOne("Chatty.Api.Models.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.HasKey("chatId", "userId");
+            modelBuilder.Entity("Chatty.Api.Models.Message", b =>
+                {
+                    b.HasOne("Chatty.Api.Models.Chat", "Chats")
+                        .WithMany()
+                        .HasForeignKey("ChatsId");
 
-                    b.ToTable("UserChatLists");
+                    b.HasOne("Chatty.Api.Models.User", "Users")
+                        .WithMany()
+                        .HasForeignKey("UsersId");
+
+                    b.Navigation("Chats");
+
+                    b.Navigation("Users");
                 });
 #pragma warning restore 612, 618
         }

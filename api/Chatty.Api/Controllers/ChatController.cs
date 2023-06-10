@@ -20,12 +20,11 @@ namespace Chatty.Api.Controllers
         }
 
         [HttpPost("messages")]
-        public async Task Post(ChatMessage message)
+        public async Task Post(Message message)
         {
             message.date = Convert.ToDateTime(message.date);
             await _chatHub.Clients.All.RecieveMessage(message);
             _logger.LogInformation("connection established", DateTime.UtcNow.ToLongTimeString());
-
         }
     }
 }

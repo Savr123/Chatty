@@ -11,7 +11,7 @@ public class ChatDbContext: DbContext
     public ChatDbContext(DbContextOptions<ChatDbContext> options)
         :base(options)
     {
-        Database.EnsureDeleted();
+        // Database.EnsureDeleted();
         Database.EnsureCreated();
     }
 
@@ -19,17 +19,29 @@ public class ChatDbContext: DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<User>()
-                    .HasKey(user => new {user.chatId, user.Id});
+                    .HasKey(user => user.Id);
+        modelBuilder.Entity<User>()
+                    .HasMany(e => e.Chats)
+                    .WithMany(e => e.Users);
+        modelBuilder.Entity<User>()
+                    .Property(props => props.Id)
+                    .ValueGeneratedOnAdd();
+
         modelBuilder.Entity<Chat>()
-                    .HasKey(chat => new {chat.Id, chat.userId});
+                    .HasKey(chat => chat.Id);
+                    
+        modelBuilder.Entity<Chat>()
+                    .Property(props => props.Id)
+                    .ValueGeneratedOnAdd();
+
         modelBuilder.Entity<Message>()
-                    .HasKey(msg => new {msg.chatId, msg.Id, msg.userId});
-        modelBuilder.Entity<UserChatList>()
-                    .HasKey(ucl => new {ucl.chatId, ucl.userId});
+                    .HasKey(msg => msg.Id);
+        modelBuilder.Entity<Message>()
+                    .Property(props => props.Id)
+                    .ValueGeneratedOnAdd();
     }
 
     public DbSet<Message> Messages => Set<Message>();
     public DbSet<User> Users => Set<User>();
     public DbSet<Chat> Chats => Set<Chat>();
-    public DbSet<UserChatList> UserChatLists => Set<UserChatList>();
 }

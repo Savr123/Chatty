@@ -1,6 +1,7 @@
 using System.Net;
 using Chatty.Api.Hubs;
 using Chatty.Api.Models;
+using Chatty.Api.Helpers;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Chatty.Api.Services;
@@ -35,6 +36,7 @@ builder.Services.AddCors(options =>
     });
 });
 
+//TODO: build development mode.
 // if (!builder.Environment.IsDevelopment())
 // {
 
@@ -45,6 +47,7 @@ builder.Services.AddHttpsRedirection(options =>
     options.RedirectStatusCode = (int)HttpStatusCode.PermanentRedirect;
     options.HttpsPort = 443;
 });
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 

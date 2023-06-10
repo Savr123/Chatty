@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Chatty.Api.Models;
+using Chatty.Api.ModelsDTO;
 using Chatty.Api.Hubs.Clients;
 
 namespace Chatty.Api.Controllers
@@ -12,17 +13,20 @@ namespace Chatty.Api.Controllers
         private readonly ILogger _logger;
         private readonly ChatDbContext _context;
 
-        public LoginController(ILogger<ChatController> logger, ChatDbContext context)
+        public LoginController(ILogger<LoginController> logger, ChatDbContext context)
         {
             _logger = logger;
             _context = context;
         }
 
         [HttpPost]
-        public async Task Post()
+        public async Task Post(UserLoginCredentials usrCredentials)
         {
-            _logger.LogInformation("new log information");
-            _logger.LogInformation(Request.Body.ToString());
+            foreach(var user in _context.Users.ToList()){
+                if(user.email == usrCredentials.email)
+                    _logger.LogInformation(user.email);
+            }
+            _logger.LogInformation(usrCredentials.email);
         }
         
     }
