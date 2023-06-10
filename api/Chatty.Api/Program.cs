@@ -2,6 +2,8 @@ using System.Net;
 using Chatty.Api.Hubs;
 using Chatty.Api.Models;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper;
+using Chatty.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Server=(localdb)\\mssqllocaldb;Database=ChattyDb;Trusted_Connection=True";
@@ -20,6 +22,7 @@ builder.Services.AddDbContext<ChatDbContext>(
     options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("ClientPermission", policy =>
