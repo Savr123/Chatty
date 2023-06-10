@@ -1,2 +1,4 @@
 .run.bat.swp
-
+.vs
+api/chatty.api/.vscode
+api/chatty.api/migrations
