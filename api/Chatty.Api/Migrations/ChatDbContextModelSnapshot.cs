@@ -82,6 +82,14 @@ namespace Chatty.Api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
+                    b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("longblob");
+
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("longblob");
+
                     b.Property<string>("email")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -94,12 +102,12 @@ namespace Chatty.Api.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("password")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
                     b.Property<DateTime>("registrationDate")
                         .HasColumnType("datetime(6)");
+
+                    b.Property<string>("username")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.HasKey("Id");
 

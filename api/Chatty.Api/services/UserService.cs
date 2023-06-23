@@ -12,14 +12,12 @@ namespace Chatty.Api.Services
     public class UserService : IUserService
     {
         ChatDbContext _context;
-        private readonly ILogger _logger;
         private int saltLengthLimit = 32;
 
 
-        public UserService(ChatDbContext context, ILogger logger)
+        public UserService(ChatDbContext context)
         {
             _context = context;
-            _logger = logger;
         }
         public User? Authenticate(string username, string password)
         {
@@ -74,10 +72,12 @@ namespace Chatty.Api.Services
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
             user.registrationDate = DateTime.Now;
+            if (user.email.IndexOf("@") != -1)
+                throw new ArgumentException("invalid email format");
+            user.username = user.email.Substring(0, user.email.IndexOf("@"));
 
             _context.Users.Add(user);
             _context.SaveChanges();
-            _logger.LogInformation("new user registrated");
             return user;
         }
 

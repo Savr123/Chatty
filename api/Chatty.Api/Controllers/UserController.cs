@@ -31,13 +31,13 @@ public class UserController : Controller {
                           ChatDbContext context, 
                           IMapper mapper, 
                           IUserService userService, 
-                          AppSettings appSettings)
+                          IOptions<AppSettings> appSettings)
     {
         _logger = logger;
         _context = context;
         _mapper = mapper;
         _userService = userService;
-        _appSettings = appSettings;
+        _appSettings = appSettings.Value;
     }
 
     [HttpPost("authenticate")]
@@ -68,14 +68,14 @@ public class UserController : Controller {
     }
 
     [AllowAnonymous]
-    [HttpPost("register")]
+    [HttpPost("Registration")]
     public IActionResult Register([FromBody]UserRegistrationCredentials usrCredentials)
     {
         var user = _mapper.Map<User>(usrCredentials);  
         try
         {
             _userService.Create(user, usrCredentials.password);
-            return Ok();    
+            return Ok();
         }
         catch (Exception e)
         {

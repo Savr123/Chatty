@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -29,9 +29,35 @@ function Copyright(props) {
 }
 //TODO Replace api adress with env variable
 const theme = createTheme();
+const useEmailValid = (email) => {
+  
+  if (!email || email.length === 0) {
+    return 'Email cannot be empty';
+  }
+  const isEmailValid = /@/.test(email);
+  if (!isEmailValid) {
+    return 'Invalid email provided';
+  }
 
+  return null;
+}
 
 export default function SignUp() {
+  const [state, setState] = useState({
+    email: "",
+    password: "",
+    firstName: "",
+    lastName: ""
+  });
+  const isEmailValid = useEmailValid(state.email);
+
+
+  const handleChange = async (event) => {
+    const value = event.currentTarget.value;
+    const id = event.currentTarget.id;
+    setState(prevState => ({...prevState, [id]: value}))
+  }
+
   const handleSubmit = async (event) => { 
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -103,7 +129,10 @@ export default function SignUp() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  value = {state.email}
+                  onChange={handleChange}
                 />
+                {isEmailValid && 'email is not valid, please type it right'}
               </Grid>
               <Grid item xs={12}>
                 <TextField

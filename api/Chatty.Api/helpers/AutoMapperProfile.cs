@@ -10,6 +10,8 @@ namespace Chatty.Api.Helpers
         public AutoMapperProfile ()
         {
             CreateMap<User, UserLoginCredentials>().ReverseMap();
+            CreateMap<User, UserRegistrationCredentials>().ReverseMap();
+            
         }
     }
 }
