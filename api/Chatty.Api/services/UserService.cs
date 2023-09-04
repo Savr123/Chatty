@@ -5,6 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Linq;
 using System.Collections.Generic;
+using System.Security.Authentication;
 
 
 namespace Chatty.Api.Services
@@ -59,20 +60,20 @@ namespace Chatty.Api.Services
         public User Create(User user, string password)
         {
             if(String.IsNullOrEmpty(password))
-                throw new ApplicationException("password is required");
+                throw new AuthenticationException("password is required");
 
             if(_context.Users.Any(x => x.email == user.email))
-                throw new ApplicationException("email '" + user.email + "' is already taken");
+                throw new AuthenticationException("email '" + user.email + "' is already taken");
 
             if(_context.Users.Any(x => x.username == user.username))
-                throw new ApplicationException("username '" + user.username + "' is already taken");
+                throw new AuthenticationException("username '" + user.username + "' is already taken");
             
             byte[] passwordSalt, passwordHash;
             hashPassword(password, out passwordHash, out passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
             user.registrationDate = DateTime.Now;
-            if (user.email.IndexOf("@") != -1)
+            if (user.email.IndexOf("@") == -1)
                 throw new ArgumentException("invalid email format");
             user.username = user.email.Substring(0, user.email.IndexOf("@"));
 

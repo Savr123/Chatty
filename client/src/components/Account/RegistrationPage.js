@@ -63,7 +63,7 @@ export default function SignUp() {
     const data = new FormData(event.currentTarget);
 
     try{
-        await fetch('https://localhost:8080/Registration',{
+        await fetch('https://localhost:8080/User/Registration',{
             method: 'POST',
             body: JSON.stringify(Object.fromEntries(data)),
             headers: {
@@ -73,6 +73,7 @@ export default function SignUp() {
     }
     catch(e) {
         console.log('failed to register');
+        console.log(e.message);
     }
     console.log({
       email: data.get('email'),
