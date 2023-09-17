@@ -17,7 +17,6 @@ using Chatty.Api.Helpers;
 
 
 namespace Chatty.Api.Controllers;
-[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class UserController : Controller {

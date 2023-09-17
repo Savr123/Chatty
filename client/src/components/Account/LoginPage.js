@@ -44,7 +44,7 @@ export default function Login() {
     const data = new FormData(event.currentTarget);
     data.set("name","1");
     try{
-      await fetch('https://localhost:8080/login',{
+      await fetch('https://localhost:8080/Login',{
         method:'POST',
         body:JSON.stringify(Object.fromEntries(data)),
         headers: {

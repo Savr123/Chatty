@@ -3,10 +3,12 @@ using Chatty.Api.Hubs;
 using Chatty.Api.Models;
 using Chatty.Api.Hubs.Clients;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Chatty.Api.Controllers
 {
     [ApiController]
+    [Authorize]
     [Route("[controller]")]
     public class ChatController : Controller
     {
@@ -19,6 +21,7 @@ namespace Chatty.Api.Controllers
             _logger = logger;
         }
 
+        
         [HttpPost("messages")]
         public async Task Post(Message message)
         {

@@ -23,10 +23,13 @@ namespace Chatty.Api.Controllers
         [HttpPost]
         public async Task Post(UserLoginCredentials usrCredentials)
         {
-            foreach(var user in _context.Users.ToList()){
+            foreach(var user in _context.Users.ToList())
+            {
                 if(user.email == usrCredentials.email)
+                {
                     _logger.LogInformation("user found!");
                     _logger.LogInformation(user.email);
+                }
             }
             _logger.LogInformation(usrCredentials.email);
         }
