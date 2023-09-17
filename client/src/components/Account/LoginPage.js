@@ -36,25 +36,27 @@ export default function Login() {
   //TODO Replace api adress with env variable
   const handleSubmit = async (event) => {
     event.preventDefault();
+    var tokenKey = "accessToken";
     const userCredentials = {
       email: email,
-      password: password,
-      name: "1"
+      name: "1",
+      password : password
     }
     const data = new FormData(event.currentTarget);
-    data.set("name","1");
-    try{
-      await fetch('https://localhost:8080/Login',{
-        method:'POST',
-        body:JSON.stringify(Object.fromEntries(data)),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
+    data.set("username","1");
+    const response = await fetch('https://localhost:8080/Login',{
+      method:'POST',
+      body:JSON.stringify(Object.fromEntries(data)),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+    var responseData = await response.json();
+    if(response.ok === true){
+      sessionStorage.setItem(tokenKey, responseData);
+      console.log(responseData.access_token);
     }
-    catch(e) {
-      console.log('failed to login.', e);
-    }
+    console.log(responseData);
     console.log({
       email: data.get('email'),
       password: data.get('password'),
