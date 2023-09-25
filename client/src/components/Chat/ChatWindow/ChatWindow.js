@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Message from './Message/Message';
 
 import { List } from '@mui/material';
@@ -6,6 +6,7 @@ import { Scrollbars } from 'react-custom-scrollbars-2';
 
 const ChatWindow = (props) => {
     
+    const [user, setUser] = useState();
     const scrollBarRef = useRef();
     useEffect(()=> {
         if(scrollBarRef) {
@@ -15,13 +16,14 @@ const ChatWindow = (props) => {
         }
     }, []);
     const chat = props.chat
-        .map((m, id) => <Message
-            date        = {(new Date(m.date)).toLocaleString()}
+        .map((message, id) => <Message
+            date        = {(new Date(message.date)).toLocaleString()}
             key         = {id}
-            id          = {m.id}
-            text        = {m.text}
-            chatId      = {m.chatId}
-            userId      ={m.userId}/>);
+            id          = {message.id}
+            user        = {user}
+            text        = {message.text}
+            chatId      = {message.chatId}
+            userId      ={message.userId}/>);
     
     return (
         <Scrollbars ref={scrollBarRef} autoHide>

@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authorization;
 namespace Chatty.Api.Controllers
 {
     [ApiController]
-    [Authorize]
     [Route("[controller]")]
     public class ChatController : Controller
     {

@@ -18,10 +18,10 @@ import { Avatar } from '@mui/material';
 
 
 
-const Chat = () => {
+const Chat = ( user ) => {
 
     const [ connection, setConnection ] = useState([]);
-    const [ chat, setChat ] = useState([{id: '1', text:'Hello', date: (new Date()).toJSON()}]);
+    const [ chat, setChat ] = useState([]);
     const latestChat = useRef(null);
 
     latestChat.current = chat;
@@ -41,9 +41,9 @@ const Chat = () => {
                     updatedChat.push(message);
 
                     setChat(updatedChat);
-                })
+                });
             })
-            .catch(e => console.log('Connection failed: ', e))
+            .catch(e => console.log('Connection failed: ', e));
     }, []);
 
     const sendMessage = async (message, date) => {
@@ -52,10 +52,11 @@ const Chat = () => {
             text:    message,
             date:       date,
             chatId: "1",
-            userId: "1"
+            userId: "1",
+            token: sessionStorage.getItem("accessToken"),
         };
 
-        try{
+        try {
             await fetch('https://localhost:8080/Chat/messages', {
                 method: 'POST',
                 body: JSON.stringify(chatMessage),
@@ -67,7 +68,7 @@ const Chat = () => {
         catch(e){
             console.log('Sending message failed. ', e)
         }
-    }
+    };
 
   return (
     
@@ -110,7 +111,7 @@ const Chat = () => {
                 </List>
             </Grid>
             <Grid item xs={9} sx={{display:'flex', justifyContent:'flex-end', flexDirection: 'column', height: '100%'}}>
-                <ChatWindow chat={chat} sx={{overflowY: 'scroll'}}/>
+                <ChatWindow user={user} chat={chat} sx={{overflowY: 'scroll'}}/>
                 <ChatInput sendMessage={sendMessage}/>
             </Grid>
         </Grid>

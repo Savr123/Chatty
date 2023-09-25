@@ -29,19 +29,16 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function Login() {
+//TODO: Допилить нормально
+export default function Login( {onUserDataChange} ) {
   const [ email, setEmail ] = useState();
   const [ password, setPassword] = useState();
+  const [ user, setUser] = useState();
 
   //TODO Replace api adress with env variable
   const handleSubmit = async (event) => {
     event.preventDefault();
     var tokenKey = "accessToken";
-    const userCredentials = {
-      email: email,
-      name: "1",
-      password : password
-    }
     const data = new FormData(event.currentTarget);
     data.set("username","1");
     const response = await fetch('https://localhost:8080/Login',{
@@ -51,16 +48,19 @@ export default function Login() {
         'Content-Type': 'application/json'
       }
     });
+
     var responseData = await response.json();
+
+    var userObj = {
+      name: data.get("name"),
+      email: data.get("email"),
+    }
+    setUser(userObj);
+    onUserDataChange(user);
+
     if(response.ok === true){
       sessionStorage.setItem(tokenKey, responseData);
-      console.log(responseData.access_token);
     }
-    console.log(responseData);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
   };
 
   return (
