@@ -1,18 +1,15 @@
-#region using 
-using System.Net;
-
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
-using Microsoft.AspNetCore.Authorization;
+using System.Net;
 
 using Chatty.Api.Services;
 using Chatty.Api.Models;
 using Chatty.Api.Helpers;
 using Chatty.Api.Hubs;
-#endregion
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Server=(localdb)\\mssqllocaldb;Database=ChattyDb;Trusted_Connection=True";
@@ -25,10 +22,10 @@ builder.Logging.AddConsole();
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<ChatDbContext>(
     options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options => 
@@ -88,21 +85,22 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseHttpsRedirection();
 app.MapControllers();
 if (app.Environment.IsDevelopment())
-{
     app.UseDeveloperExceptionPage();
-}
 else
 {
     app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
+
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseCors("ClientPermission");
+
 app.UseEndpoints((endpoints) =>
 {
     endpoints.MapControllers();
@@ -121,6 +119,7 @@ app.Map("signIn/{username}", (string username) =>
     );
     return new JwtSecurityTokenHandler().WriteToken(jwt);
 });
+
 app.Map("/sss", [Authorize] ()=> new {message = "Hello world!"});
 
 app.Run();

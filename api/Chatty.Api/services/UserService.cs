@@ -15,11 +15,11 @@ namespace Chatty.Api.Services
         ChatDbContext _context;
         private int saltLengthLimit = 32;
 
-
         public UserService(ChatDbContext context)
         {
             _context = context;
         }
+
         public User? Authenticate(string username, string password)
         {
             if(String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password))
@@ -41,6 +41,7 @@ namespace Chatty.Api.Services
         {
             return _context.Users;
         }
+
         public User GetById(int id)
         {
             var user = _context.Users.Find(id);
@@ -48,6 +49,7 @@ namespace Chatty.Api.Services
                 throw new ApplicationException("Couldn't find user");
             return user;
         }
+
         public void Delete(int id)
         {
             var user = _context.Users.Find(id);
@@ -57,6 +59,7 @@ namespace Chatty.Api.Services
                 _context.SaveChanges();
             }
         }
+
         public User Create(User user, string password)
         {
             if(String.IsNullOrEmpty(password))
@@ -73,12 +76,15 @@ namespace Chatty.Api.Services
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
             user.registrationDate = DateTime.Now;
+
             if (user.email.IndexOf("@") == -1)
                 throw new ArgumentException("invalid email format");
+
             user.username = user.email.Substring(0, user.email.IndexOf("@"));
 
             _context.Users.Add(user);
             _context.SaveChanges();
+
             return user;
         }
 
@@ -134,9 +140,8 @@ namespace Chatty.Api.Services
         {
             var salt = new byte[saltLengthLimit];
             using (var random = RandomNumberGenerator.Create())
-            {
                 random.GetNonZeroBytes(salt);
-            }
+
             return salt;
         }
 
@@ -144,18 +149,21 @@ namespace Chatty.Api.Services
         {
             if(String.IsNullOrEmpty(password))
                 throw new ApplicationException("Password cannot be null or whitespace.");
-            if (storedHash.Length != 64) throw new ArgumentException("Invalid length of password hash (64 bytes expected).", "passwordHash");
-            if (storedSalt.Length != 128) throw new ArgumentException("Invalid length of password salt (128 bytes expected).", "passwordHash");
+
+            if (storedHash.Length != 64) 
+                throw new ArgumentException("Invalid length of password hash (64 bytes expected).", "passwordHash");
+            
+            if (storedSalt.Length != 128) 
+                throw new ArgumentException("Invalid length of password salt (128 bytes expected).", "passwordHash");
             
             using (var hmac = new System.Security.Cryptography.HMACSHA512(storedSalt))
             {
                 var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 for (int i = 0; i < computedHash.Length; i++)
-                {
-                    if (computedHash[i] != storedHash[i]) return false;
-                }
+                    if (computedHash[i] != storedHash[i]) 
+                        return false;
             }
-            
+
             return true;
         }
     }
