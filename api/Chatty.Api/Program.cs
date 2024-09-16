@@ -12,11 +12,17 @@ using Chatty.Api.Helpers;
 using Chatty.Api.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? "Server=(localdb)\\mssqllocaldb;Database=ChattyDb;Trusted_Connection=True";
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var httpPort = builder.Configuration.GetValue<string>("httpPort");
+var httpsPort = builder.Configuration.GetValue<string>($"httpsPort");
 
+#region logger
 // Add logging to console
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
+builder.Logging.AddDebug();
+builder.Logging.AddEventSourceLogger();
+#endregion
 
 
 // Add services to the container.
@@ -58,17 +64,10 @@ builder.Services.AddCors(options =>
         policy.AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials()
-            //   .AllowAnyOrigin();
-              .WithOrigins("http://localhost:3000")
-              .WithOrigins("https://localhost:3000"); 
+              //   .AllowAnyOrigin();
+              .WithOrigins($"http://localhost:{httpPort}", $"https://localhost:{httpsPort}");
     });
 });
-
-//TODO: build development mode.
-// if (!builder.Environment.IsDevelopment())
-// {
-
-// }
 
 builder.Services.AddHttpsRedirection(options =>
 {
@@ -79,17 +78,14 @@ builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
-
 app.UseHttpsRedirection();
 app.MapControllers();
 if (app.Environment.IsDevelopment())
+{
     app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 else
 {
     app.UseExceptionHandler("/Error");
@@ -114,12 +110,11 @@ app.Map("signIn/{username}", (string username) =>
         issuer: AuthOptions.ISSUER,
         audience: AuthOptions.AUDIENCE,
         claims: claims,
+        //TODO: Проверить что 2 минуты достаточно для жизни токена
         expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)),
         signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
     );
     return new JwtSecurityTokenHandler().WriteToken(jwt);
 });
-
-app.Map("/sss", [Authorize] ()=> new {message = "Hello world!"});
 
 app.Run();
