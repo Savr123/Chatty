@@ -7,30 +7,27 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Chatty.Api", "api\Chatty.Ap
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "client", "client\client.esproj", "{C4EBDAF4-CE97-4F20-ADC4-5A06DBA902E2}"
 EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "reactproject2", "reactproject2\reactproject2.esproj", "{4F36C87E-D519-4584-A7FD-CD7532292BBB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug-NonClient|Any CPU = Debug-NonClient|Any CPU
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{42199A58-DE28-465B-B277-0DCA10695AA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{42199A58-DE28-465B-B277-0DCA10695AA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42199A58-DE28-465B-B277-0DCA10695AA3}.Debug-NonClient|Any CPU.ActiveCfg = Debug|Any CPU
+		{42199A58-DE28-465B-B277-0DCA10695AA3}.Debug-NonClient|Any CPU.Build.0 = Debug|Any CPU
 		{42199A58-DE28-465B-B277-0DCA10695AA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42199A58-DE28-465B-B277-0DCA10695AA3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C4EBDAF4-CE97-4F20-ADC4-5A06DBA902E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C4EBDAF4-CE97-4F20-ADC4-5A06DBA902E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4EBDAF4-CE97-4F20-ADC4-5A06DBA902E2}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C4EBDAF4-CE97-4F20-ADC4-5A06DBA902E2}.Debug-NonClient|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4EBDAF4-CE97-4F20-ADC4-5A06DBA902E2}.Debug-NonClient|Any CPU.Build.0 = Debug|Any CPU
 		{C4EBDAF4-CE97-4F20-ADC4-5A06DBA902E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4EBDAF4-CE97-4F20-ADC4-5A06DBA902E2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C4EBDAF4-CE97-4F20-ADC4-5A06DBA902E2}.Release|Any CPU.Deploy.0 = Release|Any CPU
-		{4F36C87E-D519-4584-A7FD-CD7532292BBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4F36C87E-D519-4584-A7FD-CD7532292BBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4F36C87E-D519-4584-A7FD-CD7532292BBB}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{4F36C87E-D519-4584-A7FD-CD7532292BBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4F36C87E-D519-4584-A7FD-CD7532292BBB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4F36C87E-D519-4584-A7FD-CD7532292BBB}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
