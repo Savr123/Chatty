@@ -1,8 +1,0 @@
-C:\Users\Savr\source\repos\Savr123\Chatty\client1\obj\Debug\net8.0\client.Server.csproj.AssemblyReference.cache
-C:\Users\Savr\source\repos\Savr123\Chatty\client1\obj\Debug\net8.0\client.Server.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Savr\source\repos\Savr123\Chatty\client1\obj\Debug\net8.0\client.Server.AssemblyInfoInputs.cache
-C:\Users\Savr\source\repos\Savr123\Chatty\client1\obj\Debug\net8.0\client.Server.AssemblyInfo.cs
-C:\Users\Savr\source\repos\Savr123\Chatty\client1\obj\Debug\net8.0\client.Server.csproj.CoreCompileInputs.cache
-C:\Users\Savr\source\repos\Savr123\Chatty\client1\obj\Debug\net8.0\client.Server.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\Savr\source\repos\Savr123\Chatty\client1\obj\Debug\net8.0\client.Server.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\Savr\source\repos\Savr123\Chatty\client1\obj\Debug\net8.0\client.Server.sourcelink.json

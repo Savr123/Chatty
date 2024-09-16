@@ -31,104 +31,104 @@ const theme = createTheme();
 
 //TODO: Допилить нормально
 export default function Login( {onUserDataChange} ) {
-  const [ email, setEmail ] = useState();
-  const [ password, setPassword] = useState();
-  const [ user, setUser] = useState();
+    const [ email, setEmail ] = useState();
+    const [ password, setPassword] = useState();
+    const [ user, setUser] = useState();
 
-  //TODO Replace api adress with env variable
-  const handleSubmit = async (event) => {
+    //TODO Replace api adress with env variable
+    const handleSubmit = async (event) => {
     event.preventDefault();
     var tokenKey = "accessToken";
     const data = new FormData(event.currentTarget);
     data.set("username","1");
     const response = await fetch('https://localhost:8080/Login',{
-      method:'POST',
-      body:JSON.stringify(Object.fromEntries(data)),
-      headers: {
+        method:'POST',
+        body:JSON.stringify(Object.fromEntries(data)),
+        headers: {
         'Content-Type': 'application/json'
-      }
+        }
     });
 
     var responseData = await response.json();
 
     var userObj = {
-      name: data.get("name"),
-      email: data.get("email"),
+        name: data.get("name"),
+        email: data.get("email"),
     }
     setUser(userObj);
     onUserDataChange(user);
 
     if(response.ok === true){
-      sessionStorage.setItem(tokenKey, responseData);
+        sessionStorage.setItem(tokenKey, responseData);
     }
-  };
+    };
 
-  return (
+    return (
     <ThemeProvider theme={theme}>
-      <Container component="main" maxWidth="xs">
+        <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
-          sx={{
+            sx={{
             marginTop: 8,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-          }}
+            }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
             <LockOutlinedIcon />
-          </Avatar>
-          <Typography component="h1" variant="h5">
+            </Avatar>
+            <Typography component="h1" variant="h5">
             Sign in
-          </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+            </Typography>
+            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
-              margin="normal"
-              required
-              fullWidth
-              value={email}
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
+                margin="normal"
+                required
+                fullWidth
+                value={email}
+                label="Email Address"
+                name="email"
+                autoComplete="email"
+                autoFocus
             />
             <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              value={password}
-              autoComplete="current-password"
+                margin="normal"
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                value={password}
+                autoComplete="current-password"
             />
             <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+                control={<Checkbox value="remember" color="primary" />}
+                label="Remember me"
             />
             <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+                Sign In
             </Button>
             <Grid container>
-              <Grid item xs>
+                <Grid item xs>
                 <Link href="#" variant="body2">
-                  Forgot password?
+                    Forgot password?
                 </Link>
-              </Grid>
-              <Grid item>
+                </Grid>
+                <Grid item>
                 <Link href="#" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                    {"Don't have an account? Sign Up"}
                 </Link>
-              </Grid>
+                </Grid>
             </Grid>
-          </Box>
+            </Box>
         </Box>
-      </Container>
+        </Container>
     </ThemeProvider>
-  );
+    );
 }
