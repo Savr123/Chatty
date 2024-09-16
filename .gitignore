@@ -3,3 +3,5 @@
 api/chatty.api/.vscode
 api/chatty.api/migrations
 .vscode
+.git
+.github
