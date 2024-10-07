@@ -13,6 +13,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useSelector } from 'react-redux';
 
 function Copyright(props) {
   return (
@@ -34,6 +35,7 @@ export default function Login( {onUserDataChange} ) {
     const [ email, setEmail ] = useState();
     const [ password, setPassword] = useState();
     const [ user, setUser] = useState();
+    const userState = useSelector((state => state.User));
 
     //TODO Replace api adress with env variable
     const handleSubmit = async (event) => {

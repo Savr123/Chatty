@@ -18,6 +18,7 @@ export default defineConfig({
 
     server: {
         // this ensures that the browser opens upon server start
-        open: true
+        open: true,
+        port: 3000,
     },
 })
