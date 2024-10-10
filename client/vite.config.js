@@ -7,14 +7,13 @@ export default defineConfig({
     // depending on your application, base can also be "/"
     base: './',
     plugins: [
-        react()
+        react(), // Enables React Fast Refresh and JSX support
+        viteTsconfigPaths() // Enables support for TypeScript path mappings
     ],
 
-    //build: {
-    //    rollupOptions: {
-    //        input: './src/index.jsx', // Replace with your actual path
-    //    },
-    //},
+    build: {
+        outDir: 'dist', // Specify the output directory
+    },
 
     server: {
         // this ensures that the browser opens upon server start

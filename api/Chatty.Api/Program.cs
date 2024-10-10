@@ -65,7 +65,7 @@ builder.Services.AddCors(options =>
               .AllowAnyMethod()
               .AllowCredentials()
               //   .AllowAnyOrigin();
-              .WithOrigins($"http://localhost:{httpPort}", $"https://localhost:{httpsPort}");
+              .WithOrigins($"http://localhost:3000", $"https://localhost:3000");
     });
 });
 
