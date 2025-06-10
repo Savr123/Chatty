@@ -84,6 +84,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
+    app.MapSwagger("/swagger/{documentName}");  
     app.UseSwaggerUI();
 }
 else

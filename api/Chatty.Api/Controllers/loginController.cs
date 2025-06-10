@@ -31,7 +31,7 @@ namespace Chatty.Api.Controllers
             {
                 if(user.email == usrCredentials.email)
                 {
-                    var JwtToken = getJWT(usrCredentials.username);
+                    var JwtToken = GetJWT(usrCredentials.username);
                     var response  = new 
                     {
                         access_token = JwtToken,
@@ -47,7 +47,7 @@ namespace Chatty.Api.Controllers
             return Unauthorized();
         }
         
-        private Object getJWT(string username)
+        private Object GetJWT(string username)
         {
             var claims = new List<Claim> {new Claim(ClaimTypes.Name, username) };
             var jwt = new JwtSecurityToken(

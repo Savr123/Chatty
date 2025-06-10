@@ -1,5 +1,0 @@
-build
-.env
-node_modules
-.run.bat.swp
-dist/*

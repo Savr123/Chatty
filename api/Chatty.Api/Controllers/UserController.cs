@@ -40,7 +40,7 @@ public class UserController : Controller {
     }
 
     [HttpPost("authenticate")]
-    public IActionResult authenticate([FromBody]UserLoginCredentials userDTO)
+    public IActionResult Authenticate([FromBody]UserLoginCredentials userDTO)
     {
         var user = _userService.Authenticate(userDTO.username, userDTO.password);
     

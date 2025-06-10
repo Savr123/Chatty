@@ -4,6 +4,7 @@ using Chatty.Api.Models;
 using Chatty.Api.Hubs.Clients;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.AspNetCore.Authorization;
+using Chatty.Api.ModelDTO;
 
 namespace Chatty.Api.Controllers
 {
@@ -14,7 +15,8 @@ namespace Chatty.Api.Controllers
         private readonly IHubContext<ChatHub, IChatClient> _chatHub;
         private readonly ILogger _logger;
 
-        public ChatController(IHubContext<ChatHub, IChatClient> chatHub,ILogger<ChatController> logger)
+        public ChatController (IHubContext<ChatHub, IChatClient> chatHub, 
+                               ILogger<ChatController> logger)
         {
             _chatHub = chatHub;
             _logger = logger;
@@ -22,9 +24,15 @@ namespace Chatty.Api.Controllers
 
         
         [HttpPost("messages")]
-        public async Task Post(Message message)
+        public async Task Post(MessageDTO messageDTO)
         {
-            message.date = Convert.ToDateTime(message.date);
+            messageDTO.Date = Convert.ToDateTime(messageDTO.Date);
+            Message message = new Message()
+            {
+                Date = messageDTO.Date,
+                Id = messageDTO.Id,
+                Text = messageDTO.Text,
+            };
             await _chatHub.Clients.All.RecieveMessage(message);
             _logger.LogInformation("connection established", DateTime.UtcNow.ToLongTimeString());
         }
