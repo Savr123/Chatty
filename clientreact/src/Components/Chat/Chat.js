@@ -26,12 +26,13 @@ const Chat = ( user ) => {
     const [ chat, setChat ] = useState([]);
     const latestChat = useRef(null);
     const userState = useSelector(state => state.user);
+    const rootURI = process.env.REACT_APP_HTTPS_ROOT;
 
     latestChat.current = chat;
 
     useEffect(() => {
         const connection = new HubConnectionBuilder()
-            .withUrl('https://localhost:8080/hubs/chat')
+            .withUrl(`${rootURI}/hubs/chat`)
             .withAutomaticReconnect()
             .build();
             
@@ -60,7 +61,7 @@ const Chat = ( user ) => {
         };
 
         try {
-            await fetch('https://localhost:8080/Chat/messages', {
+            await fetch(`${rootURI}/Chat/messages`, {
                 method: 'POST',
                 body: JSON.stringify(chatMessage),
                 headers: {

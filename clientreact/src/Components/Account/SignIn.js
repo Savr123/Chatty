@@ -36,6 +36,7 @@ export default function SignIn( {onUserDataChange} ) {
     const [ password, setPassword] = useState();
     const [ user, setUser] = useState();
     const userState = useSelector((state => state.User));
+    const rootURI = process.env.REACT_APP_HTTPS_ROOT;
 
     //TODO Replace api adress with env variable
     const handleSubmit = async (event) => {
@@ -43,7 +44,7 @@ export default function SignIn( {onUserDataChange} ) {
     var tokenKey = "accessToken";
     const data = new FormData(event.currentTarget);
     data.set("username","1");
-    const response = await fetch('https://localhost:8080/SignIn',{
+    const response = await fetch(`${rootURI}/SignIn`,{
         method:'POST',
         body:JSON.stringify(Object.fromEntries(data)),
         headers: {

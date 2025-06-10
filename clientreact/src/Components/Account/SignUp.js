@@ -49,6 +49,7 @@ export default function SignUp() {
     lastName: ""
   });
   const isEmailValid = useEmailValid(state.email);
+  const rootURI = process.env.REACT_APP_HTTPS_ROOT;
 
 
   const handleChange = async (event) => {
@@ -62,7 +63,7 @@ export default function SignUp() {
     const data = new FormData(event.currentTarget);
 
     try{
-        await fetch('https://localhost:8080/User/Registration',{
+        await fetch(`${rootURI}/User/Registration`,{
             method: 'POST',
             body: JSON.stringify(Object.fromEntries(data)),
             headers: {
