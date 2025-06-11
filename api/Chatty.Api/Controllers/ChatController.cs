@@ -10,6 +10,7 @@ namespace Chatty.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
+    [Authorize]
     public class ChatController : Controller
     {
         private readonly IHubContext<ChatHub, IChatClient> _chatHub;

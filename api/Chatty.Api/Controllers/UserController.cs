@@ -19,6 +19,7 @@ using Chatty.Api.Helpers;
 namespace Chatty.Api.Controllers;
 [ApiController]
 [Route("[controller]")]
+[Authorize]
 public class UserController : Controller {
     private readonly ChatDbContext _context;
     private readonly ILogger _logger;
