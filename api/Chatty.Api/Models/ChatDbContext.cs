@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using MySql.Data.EntityFramework;
+//using MySql.Data.EntityFramework;
+using Npgsql;
 
 namespace Chatty.Api.Models;
 

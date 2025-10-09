@@ -75,7 +75,7 @@ namespace Chatty.Api.Services
             hashPassword(password, out passwordHash, out passwordSalt);
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
-            user.registrationDate = DateTime.Now;
+            user.registrationDate = DateTime.UtcNow;
 
             if (user.email.IndexOf("@") == -1)
                 throw new ArgumentException("invalid email format");

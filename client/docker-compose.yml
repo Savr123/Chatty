@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  # Production версия
+  client:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"
+    restart: unless-stopped
+    container_name: chatty-client
+  
+  # Development версия с hot-reload
+  client-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3001:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+    restart: unless-stopped
+    container_name: chatty-client-dev
+    stdin_open: true
+    tty: true
+

@@ -1,0 +1,21 @@
+# Dockerfile для разработки
+FROM node:18-alpine
+
+# Установка рабочей директории
+WORKDIR /app
+
+# Копирование файлов зависимостей
+COPY package.json package-lock.json ./
+
+# Установка зависимостей
+RUN npm install --silent
+
+# Копирование исходного кода
+COPY . .
+
+# Открытие порта для dev server
+EXPOSE 3000
+
+# Запуск development сервера
+CMD ["npm", "start"]
+

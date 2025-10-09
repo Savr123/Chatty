@@ -49,7 +49,7 @@ export default function SignUp() {
     lastName: ""
   });
   const isEmailValid = useEmailValid(state.email);
-  const rootURI = process.env.REACT_APP_HTTPS_ROOT;
+  const rootURI = process.env.REACT_APP_SERVER_HTTP_ROOT;
 
 
   const handleChange = async (event) => {

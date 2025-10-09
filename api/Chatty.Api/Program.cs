@@ -12,7 +12,8 @@ using Chatty.Api.Helpers;
 using Chatty.Api.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+//var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+var connectionString = builder.Configuration.GetConnectionString("PostgreSQLConnectionString");
 var httpPort = builder.Configuration.GetValue<string>("httpPort");
 var httpsPort = builder.Configuration.GetValue<string>($"httpsPort");
 
@@ -30,7 +31,24 @@ builder.Logging.AddEventSourceLogger();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddDbContext<ChatDbContext>(
-    options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    //options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options => options.UseNpgsql(connectionString));
+
+builder.Services.Configure<RouteOptions>(options =>
+{
+    options.AppendTrailingSlash = false; // Отключаем добавление `/` в конец URL
+});
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ClientPermission", policy =>
+    {
+        policy.AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials()
+              //   .AllowAnyOrigin();
+              .WithOrigins($"http://localhost:3001", $"https://localhost:3001");
+    });
+});
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -57,28 +75,17 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile));
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("ClientPermission", policy =>
-    {
-        policy.AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials()
-              //   .AllowAnyOrigin();
-              .WithOrigins($"http://localhost:3000", $"https://localhost:3000");
-    });
-});
 
-builder.Services.AddHttpsRedirection(options =>
-{
-    options.RedirectStatusCode = (int)HttpStatusCode.PermanentRedirect;
-    options.HttpsPort = 443;
-});
+//builder.Services.AddHttpsRedirection(options =>
+//{
+//    options.RedirectStatusCode = (int)HttpStatusCode.PermanentRedirect;
+//    options.HttpsPort = 443;
+//});
 builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.MapControllers();
 if (app.Environment.IsDevelopment())
 {
@@ -94,9 +101,9 @@ else
 }
 
 app.UseRouting();
+app.UseCors("ClientPermission");
 app.UseAuthentication();
 app.UseAuthorization();
-app.UseCors("ClientPermission");
 
 app.UseEndpoints((endpoints) =>
 {

@@ -26,7 +26,7 @@ const Chat = ( user ) => {
     const [ chat, setChat ] = useState([]);
     const latestChat = useRef(null);
     const userState = useSelector(state => state.user);
-    const rootURI = process.env.REACT_APP_HTTPS_ROOT;
+    const rootURI = process.env.REACT_APP_SERVER_HTTP_ROOT;
 
     latestChat.current = chat;
 
