@@ -6,6 +6,7 @@ using Chatty.Api.Helpers;
 using System.Security.Claims;
 using Microsoft.IdentityModel.Tokens;
 using System.Web;
+using Chatty.Api.Services;
 
 namespace Chatty.Api.Controllers
 {
@@ -16,11 +17,13 @@ namespace Chatty.Api.Controllers
         
         private readonly ILogger _logger;
         private readonly ChatDbContext _context;
+        private readonly IUserService _userService;
 
-        public LoginController(ILogger<LoginController> logger, ChatDbContext context)
+        public LoginController(ILogger<LoginController> logger, IUserService userSerivce, ChatDbContext context)
         {
             _logger = logger;
             _context = context;
+            _userService = userSerivce;
         }
 
         //TODO: Create JWT-token (cuz I wanna make it clear, all by myself)
@@ -31,34 +34,23 @@ namespace Chatty.Api.Controllers
             {
                 if(user.email == usrCredentials.email)
                 {
-                    var JwtToken = GetJWT(usrCredentials.username);
+                    _userService.Authenticate(user.email, user.PasswordHash);
                     var response  = new 
-                    {
-                        access_token = JwtToken,
-                        username = usrCredentials.username,
-                        email = usrCredentials.email
-                    };
+                        {
+                            access_token = JwtToken,
+                            email = user.email,
+                            username = user.username,
+                            lastName = user.lastName,
+                            firstName = user.firstName
+                        };
                     _logger.LogInformation("user found!");
                     _logger.LogInformation(user.email);
+
                     return Json(response);
                 }
             }
             _logger.LogInformation(usrCredentials.email);
             return Unauthorized();
-        }
-        
-        private Object GetJWT(string username)
-        {
-            var claims = new List<Claim> {new Claim(ClaimTypes.Name, username) };
-            var jwt = new JwtSecurityToken(
-                issuer: AuthOptions.ISSUER,
-                audience: AuthOptions.AUDIENCE,
-                claims: claims,
-                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)),
-                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
-            );
-
-            return new JwtSecurityTokenHandler().WriteToken(jwt);
         }
 
     }

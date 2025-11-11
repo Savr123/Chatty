@@ -32,7 +32,12 @@ const Chat = ( user ) => {
 
     useEffect(() => {
         const connection = new HubConnectionBuilder()
-            .withUrl(`${rootURI}/hubs/chat`)
+            .withUrl(`${rootURI}/hubs/chat`,
+                {
+                    accessTokenFactory() {
+                        sessionStorage.getItem('accessToken');
+                    }
+                })
             .withAutomaticReconnect()
             .build();
             

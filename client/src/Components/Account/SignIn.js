@@ -35,20 +35,33 @@ export default function SignIn({onUserDataChange} ) {
     const [ email, setEmail ] = useState();
     const [ password, setPassword] = useState();
     const [ user, setUser] = useState();
+    const navigate = useNavigate();
     const userState = useSelector((state => state.User));
     const rootURI = process.env.REACT_APP_SERVER_HTTP_ROOT;
+    const [formData, setFormData] = useState({
+        email: '',
+        password: '',
+        rememberMe: false
+    });
 
+    const handleChange = (event) => {
+        const {name, value, type, checked} = event.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: type === 'checkbox' ? checked : value
+        }));
+    }
 
-    //TODO Replace api adress with env variable
     const handleSubmit = async (event) =>
     {
         event.preventDefault();
         var tokenKey = "accessToken";
-        const data = new FormData(event.currentTarget);
-        data.set("username","1");
         const response = await fetch(`${rootURI}/Login`,{
             method:'POST',
-            body:JSON.stringify(Object.fromEntries(data)),
+            body:JSON.stringify({
+                email: formData.email,
+                password: formData.password
+            }),
             headers: {
             'Content-Type': 'application/json'
             }
@@ -57,15 +70,16 @@ export default function SignIn({onUserDataChange} ) {
         var responseData = await response.json();
 
         var userObj = {
-            name: data.get("name"),
-            email: data.get("email"),
+            name: responseData.username,
+            email: responseData.email,
         }
         setUser(userObj);
         if (onUserDataChange)
             onUserDataChange(user);
 
         if(response.ok === true){
-            sessionStorage.setItem(tokenKey, responseData);
+            sessionStorage.setItem(tokenKey, responseData.access_token);
+            navigate('/');
         }
     };
 
@@ -92,7 +106,8 @@ export default function SignIn({onUserDataChange} ) {
                             margin="normal"
                             required
                             fullWidth
-                            value={email}
+                            value={formData.email}
+                            onChange={handleChange}
                             label="Email Address"
                             name="email"
                             autoComplete="email"
@@ -105,11 +120,12 @@ export default function SignIn({onUserDataChange} ) {
                             name="password"
                             label="Password"
                             type="password"
-                            value={password}
+                            value={formData.password}
+                            onChange={handleChange}
                             autoComplete="current-password"
                         />
                         <FormControlLabel
-                            control={<Checkbox value="remember" color="primary" />}
+                            control={<Checkbox value={formData.rememberMe} color="primary" />}
                             label="Remember me"
                         />
                         <Button

@@ -16,6 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("PostgreSQLConnectionString");
 var httpPort = builder.Configuration.GetValue<string>("httpPort");
 var httpsPort = builder.Configuration.GetValue<string>($"httpsPort");
+var corsOrigins = builder.Configuration.GetSection("CorsOrigins").Get<string[]>() ?? new[] { "http://localhost:3000" };
 
 #region logger
 // Add logging to console
@@ -45,8 +46,7 @@ builder.Services.AddCors(options =>
         policy.AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials()
-              //   .AllowAnyOrigin();
-              .WithOrigins($"http://localhost:3001", $"https://localhost:3001");
+              .WithOrigins(corsOrigins);
     });
 });
 

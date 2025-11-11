@@ -1,2 +1,36 @@
-bin
-obj
+# Build outputs
+bin/
+obj/
+out/
+publish/
+
+# User-specific files
+*.user
+*.suo
+*.cache
+*.dll
+*.exe
+*.pdb
+
+# NuGet
+packages/
+*.nupkg
+
+# Test results
+TestResults/
+*.trx
+
+# VS files
+.vs/
+.vscode/
+
+# Migrations (optional - include if you want to run migrations in container)
+# Migrations/
+
+# Configuration (will be overridden by environment variables)
+appsettings.Development.json
+appsettings.Local.json
+
+# Logs
+*.log
+logs/

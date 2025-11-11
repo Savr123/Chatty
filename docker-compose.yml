@@ -1,0 +1,89 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: chatty-postgres
+    environment:
+      POSTGRES_DB: ChattyDb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - chatty-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d ChattyDb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # .NET API
+  api:
+    build:
+      context: .
+      dockerfile: api/Chatty.Api/dockerfile
+    container_name: chatty-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__PostgreSQLConnectionString=Host=postgres;Port=5432;Database=ChattyDb;Username=postgres;Password=admin;
+      - ASPNETCORE_URLS=http://+:80
+    ports:
+      - "5000:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - chatty-network
+    restart: unless-stopped
+
+  # React Client (Development)
+  client-dev:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    container_name: chatty-client-dev
+    ports:
+      - "3001:3000"
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - WATCHPACK_POLLING=true
+      - REACT_APP_API_URL=http://localhost:5000
+    depends_on:
+      - api
+    networks:
+      - chatty-network
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+  # React Client (Production)
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: chatty-client
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    networks:
+      - chatty-network
+    restart: unless-stopped
+
+networks:
+  chatty-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
+

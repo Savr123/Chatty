@@ -1,0 +1,37 @@
+# Docker Compose Override for Development
+# This file is automatically merged with docker-compose.yml
+# Use this for local development customizations
+
+version: '3.8'
+
+services:
+  postgres:
+    # Uncomment to expose PostgreSQL logs
+    # command: postgres -c log_statement=all
+    
+    # Mount custom PostgreSQL config (create if needed)
+    # volumes:
+    #   - ./postgresql.conf:/etc/postgresql/postgresql.conf
+
+  api:
+    # Enable debugging
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Logging__LogLevel__Default=Debug
+      - Logging__LogLevel__Microsoft.AspNetCore=Information
+    
+    # Mount source for hot reload (requires dotnet watch)
+    # volumes:
+    #   - ./api/Chatty.Api:/app
+    
+    # Override CORS for development
+    # environment:
+    #   - CORS__AllowedOrigins=http://localhost:3000,http://localhost:3001
+
+  client-dev:
+    # Additional environment variables for React
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000
+      - REACT_APP_WS_URL=ws://localhost:5000
+      - BROWSER=none
+

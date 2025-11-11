@@ -6,7 +6,7 @@ namespace Chatty.Api.Services
 {
     public interface IUserService
     {
-        public User Authenticate(string username, string password);
+        public Task<Object?> Authenticate(string username, string password);
         public IEnumerable<User> GetAll();
         public User GetById(int id);
         public void Delete(int id);

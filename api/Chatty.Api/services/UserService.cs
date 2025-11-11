@@ -1,11 +1,14 @@
+using Chatty.Api.Helpers;
 using Chatty.Api.Models;
 using Chatty.Api.ModelsDTO;
-
+using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Authentication;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Linq;
-using System.Collections.Generic;
-using System.Security.Authentication;
 
 
 namespace Chatty.Api.Services
@@ -20,12 +23,12 @@ namespace Chatty.Api.Services
             _context = context;
         }
 
-        public User? Authenticate(string username, string password)
+        public async Task<Object?> Authenticate(string userEmail, string password)
         {
-            if(String.IsNullOrEmpty(username) || String.IsNullOrEmpty(password))
+            if(String.IsNullOrEmpty(userEmail) || String.IsNullOrEmpty(password))
                 return null;
 
-            var user = _context.Users.SingleOrDefault(x => x.username == username);
+            var user = _context.Users.SingleOrDefault(x => x.email == userEmail);
 
             //check if user exist
             if(user == null) 
@@ -34,7 +37,18 @@ namespace Chatty.Api.Services
             if(!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
                 return null;
 
-            return user;
+
+            var JwtToken = GetJWTString(user.username);
+            var authenticatedUser = new
+            {
+                token = JwtToken,
+                email = user.email,
+                username = user.username,
+                lastName = user.lastName,
+                firstName = user.firstName
+            };
+
+            return authenticatedUser;
         }
         
         public IEnumerable<User> GetAll()
@@ -102,7 +116,7 @@ namespace Chatty.Api.Services
                 if(_context.Users.Any(x => x.email == userParam.email))
                     throw new ApplicationException("Email '" + userParam.email + "' is already taken");
             }
-            //check if username is already taken
+            //check if userEmail is already taken
             if(userParam.username != user.username){
                 if(_context.Users.Any(x => x.username == userParam.username))
                     throw new ApplicationException("Username '" + userParam.username + "' is already taken");
@@ -165,6 +179,29 @@ namespace Chatty.Api.Services
             }
 
             return true;
+        }
+
+        private async Task<string> GetJWTString(string username)
+        {
+            var jwt = await GetJWT(username);
+
+            var jwtString = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+            return jwtString;
+        }
+
+        private async Task<JwtSecurityToken> GetJWT(string username)
+        {
+            var claims = new List<Claim> { new Claim(ClaimTypes.Name, username) };
+            var jwt = new JwtSecurityToken(
+                issuer: AuthOptions.ISSUER,
+                audience: AuthOptions.AUDIENCE,
+                claims: claims,
+                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(2)),
+                signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256)
+            );
+
+            return jwt;
         }
     }
 }

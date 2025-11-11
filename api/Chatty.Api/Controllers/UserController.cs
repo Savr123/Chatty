@@ -42,28 +42,9 @@ public class UserController : Controller {
     [HttpPost("authenticate")]
     public IActionResult Authenticate([FromBody]UserLoginCredentials userDTO)
     {
-        var user = _userService.Authenticate(userDTO.username, userDTO.password);
-    
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-        var tokenDescriptor = new SecurityTokenDescriptor
-        {
-            Subject = new ClaimsIdentity(new Claim[]
-            {
-                new Claim(ClaimTypes.Name, user.Id.ToString())
-            }),
-            Expires = DateTime.UtcNow.AddDays(7),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-        };
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        var tokenString = tokenHandler.WriteToken(token);
-        return Ok(new {
-                Id = user.Id,
-                Username = user.username,
-                FirstName = user.firstName,
-                LastName = user.lastName,
-                Token = tokenString
-            });
+        var user = _userService.Authenticate(userDTO.email, userDTO.password);
+
+        return Ok(user);
     }
 
     [AllowAnonymous]
