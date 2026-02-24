@@ -9,6 +9,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import { Paper } from '@mui/material';
 import { useState, useEffect } from "react";
+import chatTokenManager from "./Services/ChatTokenManager";
 
 function App() {
   const { user, setUser } = useState();
@@ -19,6 +20,7 @@ function App() {
   }
 
   useEffect(() => {
+      chatTokenManager.setupCrossTabListeners();
       fetch('/path/to/config.json')
           .then(response => response.json())
           .then(data => {

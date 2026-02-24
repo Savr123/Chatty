@@ -38,7 +38,7 @@ namespace Chatty.Api.Services
                 return null;
 
 
-            var JwtToken = GetJWTString(user.username);
+            var JwtToken = await GetJWTString(user.username);
             var authenticatedUser = new
             {
                 token = JwtToken,

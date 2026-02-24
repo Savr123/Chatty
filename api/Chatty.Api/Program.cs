@@ -71,6 +71,31 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                         // валидация ключа безопасности
                         ValidateIssuerSigningKey = true,
                     };
+                    options.Events = new JwtBearerEvents
+                    {
+
+                        OnTokenValidated = context =>
+                        {
+                            var logger = context.HttpContext.RequestServices
+                                .GetRequiredService<ILogger<Program>>();
+
+                            logger.LogDebug("=== TOKEN VALIDATED ===");
+                            logger.LogDebug($"Token validated for user: {context.Principal.Identity.Name}");
+
+                            return Task.CompletedTask;
+                        },
+
+                        OnMessageReceived = context =>
+                        {
+                            var logger = context.HttpContext.RequestServices
+                                .GetRequiredService<ILogger<Program>>();
+
+                            logger.LogDebug("=== MESSAGE RECEIVED ===");
+                            logger.LogDebug($"Token: {context.Token}");
+
+                            return Task.CompletedTask;
+                        }
+                    };
                 });
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();

@@ -1,18 +1,17 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-
-using System.Security.Cryptography;
-using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
 using AutoMapper;
-
+using Chatty.Api.Helpers;
 using Chatty.Api.Models;
 using Chatty.Api.ModelsDTO;
 using Chatty.Api.Services;
-using Chatty.Api.Helpers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Security.Cryptography;
+using System.Text;
 
 
 
@@ -26,10 +25,10 @@ public class UserController : Controller {
     private readonly IUserService _userService;
     private readonly AppSettings _appSettings;
 
-    public UserController(ILogger<UserController> logger, 
-                          ChatDbContext context, 
-                          IMapper mapper, 
-                          IUserService userService, 
+    public UserController(ILogger<UserController> logger,
+                          ChatDbContext context,
+                          IMapper mapper,
+                          IUserService userService,
                           IOptions<AppSettings> appSettings)
     {
         _logger = logger;
@@ -40,7 +39,7 @@ public class UserController : Controller {
     }
 
     [HttpPost("authenticate")]
-    public IActionResult Authenticate([FromBody]UserLoginCredentials userDTO)
+    public IActionResult Authenticate([FromBody] UserLoginCredentials userDTO)
     {
         var user = _userService.Authenticate(userDTO.email, userDTO.password);
 
@@ -49,9 +48,9 @@ public class UserController : Controller {
 
     [AllowAnonymous]
     [HttpPost("Registration")]
-    public IActionResult Register([FromBody]UserRegistrationCredentials usrCredentials)
+    public IActionResult Register([FromBody] UserRegistrationCredentials usrCredentials)
     {
-        var user = _mapper.Map<User>(usrCredentials);  
+        var user = _mapper.Map<User>(usrCredentials);
         try
         {
             _userService.Create(user, usrCredentials.password);
@@ -61,5 +60,47 @@ public class UserController : Controller {
         {
             return BadRequest(e.Message);
         }
+    } 
+
+    [HttpPost("Logout")]
+    public IActionResult Logout()
+    {
+        throw new NotImplementedException();
+    }
+
+    [HttpPost("Login")]
+    public async Task<IActionResult> Login(UserLoginCredentials userDTO)
+    {
+
+        var user = await _userService.Authenticate(userDTO.email, userDTO.password);
+
+        if (user == null)
+        {
+            return Unauthorized(new
+            {
+                error = "invalid_credentials",
+                error_description = "Invalid email or password"
+            });
+        }
+
+        return Ok(user);
+    }
+
+    [HttpPost("RefreshToken")]
+    public IActionResult RefreshToken()
+    {
+        throw new NotImplementedException();
+    }
+
+    [HttpPost("ResetPassword")]
+    public IActionResult ResetPassword()
+    {
+        throw new NotImplementedException();
+    }
+
+    [HttpPost("ForgotPassword")]
+    public IActionResult ForgotPassword()
+    {
+        throw new NotImplementedException();
     }
 }

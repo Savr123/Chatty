@@ -17,6 +17,7 @@ import { ListItemText } from '@mui/material';
 import { Avatar } from '@mui/material';
 import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
+import chatTokenManager from '../../Services/ChatTokenManager';
 
 
 
@@ -35,7 +36,8 @@ const Chat = ( user ) => {
             .withUrl(`${rootURI}/hubs/chat`,
                 {
                     accessTokenFactory() {
-                        sessionStorage.getItem('accessToken');
+                        let token = chatTokenManager.getToken();
+                        return token;
                     }
                 })
             .withAutomaticReconnect()
@@ -65,13 +67,17 @@ const Chat = ( user ) => {
             userId: "3",
         };
 
+
         try {
+            let token = chatTokenManager.getToken();
             await fetch(`${rootURI}/Chat/messages`, {
                 method: 'POST',
-                body: JSON.stringify(chatMessage),
                 headers: {
-                    'Content-Type': 'application/json'
-                }
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(chatMessage),
+                credentials: 'include',
             });
         }
         catch(e){
