@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useSelector } from 'react-redux';
+import chatTokenManager from '../../Services/ChatTokenManager';
 
 function Copyright(props) {
   return (
@@ -56,7 +57,7 @@ export default function SignIn({onUserDataChange} ) {
     {
         event.preventDefault();
         var tokenKey = "accessToken";
-        const response = await fetch(`${rootURI}/Login`,{
+        const response = await fetch(`${rootURI}/User/Login`,{
             method:'POST',
             body:JSON.stringify({
                 email: formData.email,
@@ -78,7 +79,8 @@ export default function SignIn({onUserDataChange} ) {
             onUserDataChange(user);
 
         if(response.ok === true){
-            sessionStorage.setItem(tokenKey, responseData.access_token);
+            // sessionStorage.setItem(tokenKey, responseData.access_token);
+            chatTokenManager.setToken(responseData.token);
             navigate('/');
         }
     };
